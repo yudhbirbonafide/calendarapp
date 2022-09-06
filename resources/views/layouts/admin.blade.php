@@ -14,13 +14,9 @@
     <link rel="stylesheet" href="{{asset('admin/assets/fonts/fontawesome/css/fontawesome-all.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/plugins/animation/css/animate.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('admin/assets/ckeditor/ckeditor.css')}}">
     <script src="{{asset('admin/assets/js/vendor-all.min.js')}}"></script>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('admin/assets/ckeditor/ckeditor.js')}}"></script>
-    <script src="{{asset('js/ammo.js')}}"></script>
-    <link rel="stylesheet" href="{{asset('js/sumoselect.min.css')}}">
-    <script src="{{asset('js/jquery.sumoselect.js')}}"></script>
     <!-- Custom CSS -->
     <style>
         .error{color:#ff0000;font-style: italic;}
