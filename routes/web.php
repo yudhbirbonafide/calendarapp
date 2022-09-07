@@ -18,12 +18,15 @@ use App\Http\Controllers\CalendarController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    echo "Hello world";
+    //return view('welcome');
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/staff/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('staff_dashboard');
+    Route::post('/staff/event', [App\Http\Controllers\HomeController::class, 'save_event'])->name('save_event');
+});
 
 Route::prefix('admin')->group(function () {
 
