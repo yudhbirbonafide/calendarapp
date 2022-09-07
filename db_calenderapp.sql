@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 11:14 AM
+-- Generation Time: Sep 07, 2022 at 03:24 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -92,6 +92,36 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_leave_events`
+--
+
+CREATE TABLE `tbl_leave_events` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `event_title` varchar(255) NOT NULL,
+  `start_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `end_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `leave_type` int(4) NOT NULL,
+  `description` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0 COMMENT '0=>Pending,1=>Approved,2=>cancelled',
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_leave_events`
+--
+
+INSERT INTO `tbl_leave_events` (`id`, `user_id`, `event_title`, `start_date`, `end_date`, `leave_type`, `description`, `status`, `created_on`, `updated_on`) VALUES
+(1, 2, 'test', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 1, 'it is for tesigng', 0, '2022-09-07 10:34:44', '2022-09-07 10:34:44'),
+(2, 2, 'test1', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 1, 'it is for tesign', 0, '2022-09-07 10:39:23', '2022-09-07 10:39:23'),
+(3, 2, 'test1', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 3, 'test', 0, '2022-09-07 10:41:04', '2022-09-07 10:41:04'),
+(4, 2, 'test11', '2022-09-05 06:30:00', '2022-09-06 06:30:00', 4, 'it is for testing', 0, '2022-09-07 10:42:18', '2022-09-07 10:42:18'),
+(5, 2, 'test12', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 2, 'testing data', 0, '2022-09-07 10:43:52', '2022-09-07 10:43:52');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -113,7 +143,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `status`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@admin.com', NULL, '$2y$10$BcP5VKshRE9OOQxlOVtYAuRy7nDtny1piM1hcDq31DBBmF7YRhgqu', NULL, 1, 1, '2022-09-06 18:27:56', '2022-09-06 18:27:56');
+(1, 'Admin', 'admin@admin.com', NULL, '$2y$10$BcP5VKshRE9OOQxlOVtYAuRy7nDtny1piM1hcDq31DBBmF7YRhgqu', NULL, 1, 1, '2022-09-06 18:27:56', '2022-09-06 18:27:56'),
+(2, 'dev singh', 'dev@yopmail.com', NULL, '$2y$10$s1B0j0RtbnhiOaGwxSAkF.t8FGwplBmu2LzrItE6AX0qKQ3HNxTKy', NULL, 1, 2, '2022-09-06 23:00:28', '2022-09-06 23:00:28');
 
 --
 -- Indexes for dumped tables
@@ -147,6 +178,12 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indexes for table `tbl_leave_events`
+--
+ALTER TABLE `tbl_leave_events`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -176,10 +213,16 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_leave_events`
+--
+ALTER TABLE `tbl_leave_events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
