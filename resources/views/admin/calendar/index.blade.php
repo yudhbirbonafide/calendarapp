@@ -93,11 +93,11 @@
                     $("#leave_popup").modal('hide').data( 'bs.modal', null );
                     new Noty({ type: 'success', layout: 'topRight', text: 'Record has been updated successfully',timeout:3000 }).show(); 
                 }else{
-                    alert('Your Request is not sent. Please check you input data');
+                    new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
                 }
             },
             error:function(){
-                
+                new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
             }
         });
     }

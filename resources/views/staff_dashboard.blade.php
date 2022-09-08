@@ -3,6 +3,10 @@
 @section('content')
 <script src="{{asset('calendar/main.js')}}"></script>
 <link rel="stylesheet" href="{{asset('calendar/main.css')}}">
+<script src="{{asset('admin/assets/js/noty.js')}}"></script>
+<link rel="stylesheet" href="{{asset('admin/assets/css/noty.css')}}">
+<link rel="stylesheet" href="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.css')}}"> 
+<script src="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.js')}}"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -44,6 +48,7 @@
             weekNumberCalculation: 'ISO',
             showNonCurrentDates: false,// will disable the non current month days
             dayMaxEvents: true, // allow "more" link when too many events
+            hiddenDays: [ 1, 3, 5 ] ,
             views: {            
                 timeGridDay: { buttonText: 'Day' },
                 timeGridWeek: { buttonText: 'week' },
@@ -93,6 +98,8 @@
         // $('#from_date').datetimepicker();
         // $('#to_date').datetimepicker();
         $('body').tooltip({  selector: '.createdDiv'});
+        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker2').datetimepicker();
     });
     function submit_form(){
        var data=$('#leave_frm').serialize();
@@ -104,13 +111,15 @@
                 if(response.success){
                     $("#liveToast").removeClass('hide').addClass('show');
                     $('#leave_frm')[0].reset();
+                    $("#leave_popup").modal('hide').data( 'bs.modal', null );
+                    new Noty({ type: 'success', layout: 'topRight', text: 'Record has been updated successfully',timeout:3000 }).show();
                     calendar.addEvent({title: $("#event_title").val(), start: $("#from_date").val(), end: $("#to_date").val(),  allDay: true });
                 }else{
-                    alert('Your Request is not sent. Please check you input data');
+                    new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
                 }
             },
             error:function(){
-                
+                new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
             }
         });
     }
@@ -145,25 +154,29 @@
                     </div>
                     <div class="mb-3 row">
                         <label for="from_date" class="col-sm-2 col-form-label">From</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="from_date" class="form-control required" id="from_date" value="">
+                        <div class="col-sm-10" id="datetimepicker1">
+                            <input type="text" name="from_date" class="form-control required" id="from_date" value="" data-format="dd/MM/yyyy hh:mm:ss">
+                            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                         </div>                
                     </div>
                     <div class="mb-3 row">
                         <label for="to_date" class="col-sm-2 col-form-label">To</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="to_date" class="form-control required" id="to_date" value="">
+                        <div class="col-sm-10" id="datetimepicker2">
+                            <input type="text" name="to_date" class="form-control required" id="to_date" value="" data-format="dd/MM/yyyy hh:mm:ss">
+                            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                         </div>                
                     </div>
                     <div class="mb-3">
-                        <label for="leave_type" class="col-sm-2 col-form-label">Selection Type</label>                
-                        <select name="leave_type" class="form-select required">
+                        <?php 
+                            $leave_type=["1"=>"Sick Leave","2"=>"Work Leave","3"=>"Maternal Leave","4"=>"Marriage Leave","5"=>"Anniversary Leave"];
+                        ?>
+                        <label for="leave_type" class="col-form-label">Selection Type</label>                
+                        <select name="leave_type" class="form-control required">
                             <option value="">Please select atleast one value</option>
-                            <option value="1">Sick Leave</option>
-                            <option value="2">Work Leave</option>
-                            <option value="3">Maternal Leave</option>
-                            <option value="4">Marriage Leave</option>
-                            <option value="5">Anniversary Leave</option>
+                            <?php if(!empty($leave_type)){
+                                foreach ($leave_type as $key => $value) {?>
+                                <option value="{{$key}}">{{$value}}</option>             
+                            <?php  } }?>
                         </select>
                     </div>
                     <div class="mb-3">

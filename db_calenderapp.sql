@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 07, 2022 at 03:24 PM
+-- Generation Time: Sep 08, 2022 at 01:40 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -115,9 +115,10 @@ CREATE TABLE `tbl_leave_events` (
 INSERT INTO `tbl_leave_events` (`id`, `user_id`, `event_title`, `start_date`, `end_date`, `leave_type`, `description`, `status`, `created_on`, `updated_on`) VALUES
 (1, 2, 'test', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 1, 'it is for tesigng', 0, '2022-09-07 10:34:44', '2022-09-07 10:34:44'),
 (2, 2, 'test1', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 1, 'it is for tesign', 0, '2022-09-07 10:39:23', '2022-09-07 10:39:23'),
-(3, 2, 'test1', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 3, 'test', 0, '2022-09-07 10:41:04', '2022-09-07 10:41:04'),
+(3, 2, 'test1', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 3, 'test', 1, '2022-09-07 10:41:04', '2022-09-08 07:43:12'),
 (4, 2, 'test11', '2022-09-05 06:30:00', '2022-09-06 06:30:00', 4, 'it is for testing', 0, '2022-09-07 10:42:18', '2022-09-07 10:42:18'),
-(5, 2, 'test12', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 2, 'testing data', 0, '2022-09-07 10:43:52', '2022-09-07 10:43:52');
+(5, 2, 'test12', '2022-09-02 06:30:00', '2022-09-03 06:30:00', 2, 'testing data', 1, '2022-09-07 10:43:52', '2022-09-08 07:35:53'),
+(6, 3, 'Metting Setup', '2022-09-15 06:30:00', '2022-09-16 06:30:00', 1, 'it is for tesing', 0, '2022-09-08 11:24:29', '2022-09-08 11:24:29');
 
 -- --------------------------------------------------------
 
@@ -134,6 +135,7 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(4) NOT NULL DEFAULT 1 COMMENT '1=>Active,0=>Inactive	',
   `role` int(4) NOT NULL DEFAULT 2 COMMENT '1=>Admin,2=>Staff',
+  `assigned_color` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -142,9 +144,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `status`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@admin.com', NULL, '$2y$10$BcP5VKshRE9OOQxlOVtYAuRy7nDtny1piM1hcDq31DBBmF7YRhgqu', NULL, 1, 1, '2022-09-06 18:27:56', '2022-09-06 18:27:56'),
-(2, 'dev singh', 'dev@yopmail.com', NULL, '$2y$10$s1B0j0RtbnhiOaGwxSAkF.t8FGwplBmu2LzrItE6AX0qKQ3HNxTKy', NULL, 1, 2, '2022-09-06 23:00:28', '2022-09-06 23:00:28');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `status`, `role`, `assigned_color`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin@admin.com', NULL, '$2y$10$BcP5VKshRE9OOQxlOVtYAuRy7nDtny1piM1hcDq31DBBmF7YRhgqu', NULL, 1, 1, NULL, '2022-09-06 18:27:56', '2022-09-06 18:27:56'),
+(2, 'dev singh', 'dev@yopmail.com', NULL, '$2y$10$s1B0j0RtbnhiOaGwxSAkF.t8FGwplBmu2LzrItE6AX0qKQ3HNxTKy', NULL, 1, 2, '#6D1F36', '2022-09-06 23:00:28', '2022-09-08 05:39:17'),
+(3, 'Rajbir', 'rajbir@yopmail.com', NULL, '$2y$10$cwj0dI1NSZu6q7tOcF36De8uAyB15/juwa17LhXfs5P8MMSu19ZiO', NULL, 1, 2, '#5F9E5F', '2022-09-08 05:49:03', '2022-09-08 05:49:19');
 
 --
 -- Indexes for dumped tables
@@ -216,13 +219,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `tbl_leave_events`
 --
 ALTER TABLE `tbl_leave_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
