@@ -17,6 +17,8 @@
     <script src="{{asset('admin/assets/js/vendor-all.min.js')}}"></script>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('admin/assets/ckeditor/ckeditor.js')}}"></script>
+    <script src="{{asset('admin/assets/js/noty.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('admin/assets/css/noty.css')}}">
     <!-- Custom CSS -->
     <style>
         .error{color:#ff0000;font-style: italic;}
