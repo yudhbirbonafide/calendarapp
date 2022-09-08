@@ -29,7 +29,7 @@
                                         <div class="card Recent-Users">
                                             <div class="card-header">
                                                 <h5><?php echo $heading;?> List</h5>
-                                                <a href="{{route('admin_ammunition_bullettype_edit')}}" class="label theme-bg text-white f-12" style="float:right;">Add <?php echo $heading;?></a>
+                                                <a href="{{route('admin_staff_edit')}}" class="label theme-bg text-white f-12" style="float:right;">Add <?php echo $heading;?></a>
                                             </div>
                                             <div class="card-block px-0 py-3">
                                                 <div class="table-responsive">
@@ -38,18 +38,19 @@
                                                             <tr>
                                                                 <th>Id</th>
                                                                 <th>Name</th>
+                                                                <th>Email</th>
                                                                 <th>Status</th>
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php if(!$result->isEmpty()){
+                                                            <?php if(!empty($result)){
                                                                 foreach($result as $val){    
                                                             ?>
                                                             <tr class="unread">
-                                                                <td>{{$val['id']}}</td>
-                                                                <td>{{$val['value']}}
-                                                                </td>
+                                                                <td>{{$val['id']}}</td>                                                                
+                                                                <td><?php echo (!empty($val['name']))?substr($val['name'],0,50):"";?></td>
+                                                                <td>{{$val['email']}}</td>
                                                                 <td>
                                                                     <h6 class="text-muted">
                                                                         <?php if(!empty($val['status'])){?>
@@ -60,8 +61,8 @@
                                                                     </h6>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="{{route('admin_ammunition_bullettype_edit',['id'=>$val['id']])}}" class="label theme-bg2 text-white f-12">Edit</a>
-                                                                    <a href="{{route('admin_ammunition_bullettype_delete',['id'=>$val['id']])}}" class="label theme-bg text-white f-12" onclick="return delete_confirmation();">Delete</a>
+                                                                    <a href="{{route('admin_staff_edit',['id'=>$val['id']])}}" class="label theme-bg2 text-white f-12">Edit</a>
+                                                                    <a href="{{route('admin_staff_delete',['id'=>$val['id']])}}" class="label theme-bg text-white f-12" onclick="return delete_confirmation();">Delete</a>
                                                                 </td>
                                                             </tr>
                                                             <?php }}else{?>

@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Bulk Ammo') }}</title>
+    <title>{{ config('app.name', 'Calendar App') }}</title>
 
     <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{asset('images/apple-touch-icon.png')}}">
@@ -17,6 +17,7 @@
     <script src="{{asset('admin/assets/js/vendor-all.min.js')}}"></script>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('admin/assets/ckeditor/ckeditor.js')}}"></script>
+    <script src="{{asset('js/ammo.js')}}"></script>
     <script src="{{asset('admin/assets/js/noty.js')}}"></script>
     <link rel="stylesheet" href="{{asset('admin/assets/css/noty.css')}}">
     <!-- Custom CSS -->

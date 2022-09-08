@@ -11,7 +11,7 @@ class CalendarController extends Controller
 {
     
     public function calender_setup(){
-        $levents=LeaveEvent::all()->toArray();
+        $levents=LeaveEvent::join('users', 'tbl_leave_events.user_id', '=', 'users.id')->select('tbl_leave_events.*','users.assigned_color') ->get()->toArray();
         $final_array=[];
         if(!empty($levents)){
             foreach ($levents as $key => $value) {
@@ -19,7 +19,7 @@ class CalendarController extends Controller
                     "title"     => (!empty($value['event_title']))?$value['event_title']:"",
                     "start"     => (!empty($value['start_date']))?date('Y-m-d H:i:s',strtotime($value['start_date'])):"",
                     "end"       => (!empty($value['end_date']))?date('Y-m-d H:i:s',strtotime($value['end_date'])):"",
-                    "color"     => (!empty($value['status']))?'#257e4a':"#0d6efd",
+                    "color"     => (!empty($value['assigned_color']))?$value['assigned_color']:"#0d6efd",
                     "status"    =>  (!empty($value['status']))?'Approved':"Pending",
                     "event_id"    =>  (!empty($value['id']))?$value['id']:"0",
                 ];
