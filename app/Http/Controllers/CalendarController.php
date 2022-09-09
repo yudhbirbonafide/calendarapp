@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveEvent;
+use App\Models\RestrictedDates;
 
 use Illuminate\Http\Request;
 Use Auth;
@@ -54,6 +55,27 @@ class CalendarController extends Controller
             $event=LeaveEvent::where(['id'=>$input['event_id']])->update($event);
             $event_flag=true;
             if($event_flag){
+                $m_final_data=['success'=>true];
+            }else{
+                $m_final_data=['success'=>false];
+            }
+            return response()->json($m_final_data);
+        }
+    }
+    public function save_restricted_dated_info(Request $request){
+        // dd($request->all());
+        $input=$request->all();
+        if ($request->isMethod('post')) {
+            $restricted_dated=(!empty($input['restricted_dated']))?explode(',',$input['restricted_dated']):"";
+            $restricted_dated=array_map('trim', $restricted_dated);
+            $restricted_dated=json_encode($restricted_dated);
+            // dd($restricted_dated);
+            $restricted_info=[                
+                'restricted_dated'=>$restricted_dated,
+                'year'       =>date('Y'),
+            ];
+            $result=RestrictedDates::create($restricted_info);
+            if($result->id){
                 $m_final_data=['success'=>true];
             }else{
                 $m_final_data=['success'=>false];

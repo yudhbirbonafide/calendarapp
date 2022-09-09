@@ -45,6 +45,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/calender/setup', [CalendarController::class, 'calender_setup'])->name('admin_calender_setup');
         Route::post('/calender/event/fetch', [CalendarController::class, 'fetch_event_info'])->name('admin_calender_fetch_event_info');
         Route::post('/calender/event/save', [CalendarController::class, 'save_event_info'])->name('admin_save_event_info');
+        Route::post('/calender/event/restricted', [CalendarController::class, 'save_restricted_dated_info'])->name('admin_restricted_dated_info');
         
     });
 });

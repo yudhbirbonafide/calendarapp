@@ -2,6 +2,9 @@
 @section('content')
 <script src="{{asset('calendar/main.js')}}"></script>
 <link rel="stylesheet" href="{{asset('calendar/main.css')}}">
+<link rel="stylesheet" href="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.min.css')}}"> 
+<script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.multidatespicker.js')}}"></script>
  <!-- [ Main Content ] start -->
  <div class="pcoded-main-container">
         <div class="pcoded-wrapper">
@@ -14,13 +17,26 @@
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
                             <div class="row">
-                                <!--[ daily sales section ] start-->
+                                <!--[ daily sales section ] start-->                                
+                                <div class="col-md-8 float-right">
+                                    <div class="card daily-sales">
+                                        <div class="card-block">                                            
+                                            <form name="restricted_dated_frm" id="restricted_dated_frm">
+                                                <div class="d-flex p-3 bg-secondary text-white">
+                                                    <input type="text" class="form-control" id="datePick" name="restricted_dated" placeholder="Select dates that you want to exculde from leave calendar"/>
+                                                    <input type="submit" name="date_btn" class="btn btn-primary ml-4" value="submit">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="row">                 
                                 <div class="col-md-12">
                                     <div class="card daily-sales">
-                                        <div class="card-block">
-                                            <h6 class="mb-4">Daily Sales</h6>
+                                        <div class="card-block">                                            
+                                            <h6 class="mb-4">Daily Sales</h6>                                            
                                             <div id='calendar'></div>
-
                                         </div>
                                     </div>
                                 </div> 
@@ -119,13 +135,38 @@
             }
         });
     }
+    function exclude_dated_form(){
+       var data=$('#restricted_dated_frm').serialize();
+       $.ajax({
+            url:"{{route('admin_restricted_dated_info')}}",
+            method:"POST", 
+            data:data+'&_token={{ csrf_token() }}',
+            success:function(response) {
+                if(response.success){;
+                    new Noty({ type: 'success', layout: 'topRight', text: 'Record has been created successfully',timeout:3000 }).show(); 
+                }else{
+                    new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
+                }
+            },
+            error:function(){
+                new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
+            }
+        });
+    }
     $(document).ready(function(){        
         $("#leave_frm").validate({
             submitHandler: function (form) {
                 submit_form();
                 return false;
             }
-        });        
+        }); 
+        $("#restricted_dated_frm").validate({
+            submitHandler: function (form) {
+                exclude_dated_form();
+                return false;
+            }
+        });
+        $('#datePick').multiDatesPicker({dateFormat: "yy-mm-dd"});       
     });
     </script>
      <style>

@@ -27,10 +27,17 @@
     </div>
 </div>
 <script>
+    var restricted_dated=[];
+    <?php if(!empty($restricted_dated)){
+        foreach ($restricted_dated as $key => $value) {            
+        ?>
+            restricted_dated.push('{{$value}}');
+    <?php }} ?>
     var calendar;
     var events=<?php echo $levents;?>;
-    // console.log(JSON.parse(JSON.stringify(events)));
-    events=JSON.parse(JSON.stringify(events));
+    events=JSON.parse(JSON.stringify(events));    
+    // restricted_dated=JSON.parse(JSON.stringify(restricted_dated));
+    console.log(restricted_dated);
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
@@ -48,7 +55,7 @@
             weekNumberCalculation: 'ISO',
             showNonCurrentDates: false,// will disable the non current month days
             dayMaxEvents: true, // allow "more" link when too many events
-            hiddenDays: [ 1, 3, 5 ] ,
+            // hiddenDays: [ 1, 3, 5 ] ,
             views: {            
                 timeGridDay: { buttonText: 'Day' },
                 timeGridWeek: { buttonText: 'week' },
@@ -81,6 +88,21 @@
             },
             eventMouseLeave: function(mouseEnterInfo) {
                 $(mouseEnterInfo.el).removeClass('createdDiv').removeAttr('data-toggle','title');
+            },            
+            selectAllow: function (arg) {
+                let current_date=moment(arg.start).format('YYYY-MM-DD');               
+                if(restricted_dated.includes(current_date)){
+                    // console.log("hello");
+                    return false;
+                }else{
+                    return true;
+                }
+            },
+            dayCellDidMount:function(arg){
+                let current_date=moment(arg.date).format('YYYY-MM-DD');                
+                if(restricted_dated.includes(current_date)){
+                    $(arg.el).css("background-color","#cccccc");                    
+                }
             },
             events: events
 

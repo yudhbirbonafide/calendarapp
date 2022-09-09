@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\LeaveEvent;
-
+use App\Models\RestrictedDates;
 use Illuminate\Http\Request;
 Use Auth;
 
@@ -25,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $restricted_dated=RestrictedDates::select(['restricted_dated'])->get()->toArray();
         $levents=LeaveEvent::where(['user_id'=>Auth::user()->id])->get()->toArray();
         $final_array=[];
         if(!empty($levents)){
@@ -39,7 +40,15 @@ class HomeController extends Controller
                 $final_array[]=$data;
             }
         }
-        return view('staff_dashboard',['levents'=>json_encode($final_array)]);
+        $restricted_dated=array_column($restricted_dated,'restricted_dated');
+        $final_restricted_array=[];
+        if(!empty($restricted_dated)){
+            foreach ($restricted_dated as $key => $value) {
+                $res_data=json_decode($value,1);
+                $final_restricted_array=array_merge($final_restricted_array,$res_data);
+            }
+        }
+        return view('staff_dashboard',['levents'=>json_encode($final_array),"restricted_dated"=>$final_restricted_array]);
     }
     public function save_event(Request $request){
         // dd($request->all());

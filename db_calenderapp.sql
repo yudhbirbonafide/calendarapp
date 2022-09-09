@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 08, 2022 at 01:40 PM
+-- Generation Time: Sep 09, 2022 at 01:27 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -123,6 +123,28 @@ INSERT INTO `tbl_leave_events` (`id`, `user_id`, `event_title`, `start_date`, `e
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_restricted_dates`
+--
+
+CREATE TABLE `tbl_restricted_dates` (
+  `id` int(11) NOT NULL,
+  `restricted_dated` text NOT NULL,
+  `year` year(4) NOT NULL,
+  `status` int(4) NOT NULL DEFAULT 1,
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_restricted_dates`
+--
+
+INSERT INTO `tbl_restricted_dates` (`id`, `restricted_dated`, `year`, `status`, `created_on`, `updated_on`) VALUES
+(1, '[\"2022-09-05\",\"2022-09-06\",\"2022-09-12\",\"2022-09-14\",\"2022-09-19\",\"2022-09-21\",\"2022-09-23\",\"2022-09-26\",\"2022-09-29\"]', 2022, 1, '2022-09-09 11:02:38', '2022-09-09 11:02:38');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -187,6 +209,12 @@ ALTER TABLE `tbl_leave_events`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbl_restricted_dates`
+--
+ALTER TABLE `tbl_restricted_dates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -220,6 +248,12 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `tbl_leave_events`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tbl_restricted_dates`
+--
+ALTER TABLE `tbl_restricted_dates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
