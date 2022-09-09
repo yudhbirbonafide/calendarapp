@@ -23,7 +23,7 @@
                                         <div class="card-block">                                            
                                             <form name="restricted_dated_frm" id="restricted_dated_frm">
                                                 <div class="d-flex p-3 bg-secondary text-white">
-                                                    <input type="text" class="form-control" id="datePick" name="restricted_dated" placeholder="Select dates that you want to exculde from leave calendar"/>
+                                                    <input type="text" class="form-control" id="restricted_dated" name="restricted_dated" placeholder="Select dates that you want to exculde from leave calendar"/>
                                                     <input type="submit" name="date_btn" class="btn btn-primary ml-4" value="submit">
                                                 </div>
                                             </form>
@@ -143,6 +143,7 @@
             data:data+'&_token={{ csrf_token() }}',
             success:function(response) {
                 if(response.success){;
+                    $('#restricted_dated').val("");
                     new Noty({ type: 'success', layout: 'topRight', text: 'Record has been created successfully',timeout:3000 }).show(); 
                 }else{
                     new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
@@ -166,7 +167,7 @@
                 return false;
             }
         });
-        $('#datePick').multiDatesPicker({dateFormat: "yy-mm-dd"});       
+        $('#restricted_dated').multiDatesPicker({dateFormat: "yy-mm-dd"});       
     });
     </script>
      <style>
