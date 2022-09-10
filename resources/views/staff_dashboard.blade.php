@@ -6,6 +6,8 @@
 <script src="{{asset('admin/assets/js/noty.js')}}"></script>
 <link rel="stylesheet" href="{{asset('admin/assets/css/noty.css')}}">
 <link rel="stylesheet" href="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.css')}}"> 
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
 <script src="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.js')}}"></script>
 <div class="container">
     <div class="row justify-content-center">
@@ -37,7 +39,7 @@
     var events=<?php echo $levents;?>;
     events=JSON.parse(JSON.stringify(events));    
     // restricted_dated=JSON.parse(JSON.stringify(restricted_dated));
-    console.log(restricted_dated);
+    // console.log(restricted_dated);
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
@@ -110,19 +112,7 @@
 
         calendar.render();
     });
-    $(document).ready(function(){
-        $("#leave_frm").validate({
-            submitHandler: function (form) {
-                submit_form();
-                return false;
-            }
-        });
-        // $('#from_date').datetimepicker();
-        // $('#to_date').datetimepicker();
-        $('body').tooltip({  selector: '.createdDiv'});
-        $('#datetimepicker1').datetimepicker();
-        $('#datetimepicker2').datetimepicker();
-    });
+
     function submit_form(){
        var data=$('#leave_frm').serialize();
        $.ajax({
@@ -144,7 +134,19 @@
                 new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
             }
         });
-    }
+    }   
+
+    $(document).ready(function(){
+        $("#leave_frm").validate({
+            submitHandler: function (form) {
+                submit_form();
+                return false;
+            }
+        });        
+        $('body').tooltip({  selector: '.createdDiv'});
+        $('#from_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
+        $('#to_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
+    });
     </script>
     <style>
         .fc .fc-button-group > .fc-button {
@@ -176,16 +178,14 @@
                     </div>
                     <div class="mb-3 row">
                         <label for="from_date" class="col-sm-2 col-form-label">From</label>
-                        <div class="col-sm-10" id="datetimepicker1">
-                            <input type="text" name="from_date" class="form-control required" id="from_date" value="" data-format="dd/MM/yyyy hh:mm:ss">
-                            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                        <div class="col-sm-10">
+                            <input type="text" name="from_date" class="form-control required" id="from_date" value="" >
                         </div>                
                     </div>
                     <div class="mb-3 row">
                         <label for="to_date" class="col-sm-2 col-form-label">To</label>
                         <div class="col-sm-10" id="datetimepicker2">
-                            <input type="text" name="to_date" class="form-control required" id="to_date" value="" data-format="dd/MM/yyyy hh:mm:ss">
-                            <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                            <input type="text" name="to_date" class="form-control required" id="to_date" value="" >
                         </div>                
                     </div>
                     <div class="mb-3">

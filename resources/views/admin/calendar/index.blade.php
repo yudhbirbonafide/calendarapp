@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.min.css')}}"> 
 <script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.js')}}"></script>
 <script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.multidatespicker.js')}}"></script>
+<link rel="stylesheet" href="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.css')}}"> 
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<script src="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.js')}}"></script>
  <!-- [ Main Content ] start -->
  <div class="pcoded-main-container">
         <div class="pcoded-wrapper">
@@ -167,7 +171,7 @@
                 return false;
             }
         });
-        $('#restricted_dated').multiDatesPicker({dateFormat: "yy-mm-dd"});       
+        $('#restricted_dated').multiDatesPicker({dateFormat: "yy-mm-dd"}); 
     });
     </script>
      <style>

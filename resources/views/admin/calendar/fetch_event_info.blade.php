@@ -42,3 +42,9 @@
     </div>
 <?php  } }?>
 <input type="hidden" name="event_id" value="<?php echo (!empty($single_events['id']))?$single_events['id']:"";?>">
+<script>
+    (function () {
+        $('#from_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
+        $('#to_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
+    })();
+</script>
