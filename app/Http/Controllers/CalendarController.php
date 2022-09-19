@@ -62,25 +62,41 @@ class CalendarController extends Controller
             return response()->json($m_final_data);
         }
     }
-    public function save_restricted_dated_info(Request $request){
-        // dd($request->all());
+    public function save_restricted_dated_info(Request $request){        
         $input=$request->all();
         if ($request->isMethod('post')) {
-            $restricted_dated=(!empty($input['restricted_dated']))?explode(',',$input['restricted_dated']):"";
-            $restricted_dated=array_map('trim', $restricted_dated);
-            $restricted_dated=json_encode($restricted_dated);
-            // dd($restricted_dated);
-            $restricted_info=[                
-                'restricted_dated'=>$restricted_dated,
-                'year'       =>date('Y'),
-            ];
-            $result=RestrictedDates::create($restricted_info);
-            if($result->id){
-                $m_final_data=['success'=>true];
+            $restricted_dated=(!empty($input['restricted_dated']))?explode('~',$input['restricted_dated']):"";
+            if(!empty($restricted_dated) && is_array($restricted_dated)){
+                $restricted_dated=$this->dateRange($restricted_dated[0],$restricted_dated[1]);
+                // dd($restricted_dated);
+                $restricted_dated=array_map('trim', $restricted_dated);
+                $restricted_dated=json_encode($restricted_dated);
+                // dd($restricted_dated);
+                $restricted_info=[                
+                    'restricted_dated'=>$restricted_dated,
+                    'year'       =>date('Y'),
+                ];
+                $result=RestrictedDates::create($restricted_info);
+                if($result->id){
+                    $m_final_data=['success'=>true];
+                }else{
+                    $m_final_data=['success'=>false];
+                }
             }else{
                 $m_final_data=['success'=>false];
             }
             return response()->json($m_final_data);
         }
+    }
+    function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
+        $dates = array();
+        $current = strtotime( $first );
+        $last = strtotime( $last );    
+        while( $current <= $last ) {    
+            $dates[] = date( $format, $current );
+            $current = strtotime( $step, $current );
+        }
+    
+        return $dates;
     }
 }
