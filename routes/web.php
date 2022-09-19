@@ -18,8 +18,8 @@ use App\Http\Controllers\CalendarController;
 */
 
 Route::get('/', function () {
-    echo "Hello world";
-    //return view('welcome');
+    // echo "Hello world";
+    return view('welcome');
 });
 
 Auth::routes();
@@ -33,7 +33,7 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'],'/login', [AdminController::class, 'index'])->name('admin_login');
 
     Route::middleware(['adminAuth'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_dashboard');
+        Route::get('/dashboard', [CalendarController::class, 'calender_setup'])->name('admin_dashboard');
         Route::get('/logout', [AdminController::class, 'logout'])->name('admin_logout');
         
         /* Ammunation Components Routes*/       
