@@ -39,7 +39,7 @@
                                 <div class="col-md-12">
                                     <div class="card daily-sales">
                                         <div class="card-block">                                            
-                                            <h6 class="mb-4">Daily Sales</h6>                                            
+                                            <h6 class="mb-4">Leave Calender</h6>                                            
                                             <div id='calendar'></div>
                                         </div>
                                     </div>

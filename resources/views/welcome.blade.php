@@ -3,8 +3,9 @@
 @section('content')
 <script src="{{asset('calendar/main.js')}}"></script>
 <link rel="stylesheet" href="{{asset('calendar/main.css')}}">
-<script src="{{asset('admin/assets/js/noty.js')}}"></script>
-<link rel="stylesheet" href="{{asset('admin/assets/css/noty.css')}}">
+<link rel="stylesheet" href="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.min.css')}}"> 
+<script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/jquery-ui/jquery-ui.multidatespicker.js')}}"></script>
 <link rel="stylesheet" href="{{asset('admin/assets/plugins/datetimepicker/bootstrap-datetimepicker.min.css')}}"> 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
@@ -29,19 +30,14 @@
     </div>
 </div>
 <script>
-    var restricted_dated=[];
-    <?php if(!empty($restricted_dated)){
-        foreach ($restricted_dated as $key => $value) {            
-        ?>
-            restricted_dated.push('{{$value}}');
-    <?php }} ?>
-    var calendar;       
-    // restricted_dated=JSON.parse(JSON.stringify(restricted_dated));
-    // console.log(restricted_dated);
+    var calendar;
+    var events=<?php echo $levents;?>;
+    // console.log(JSON.parse(JSON.stringify(events)));
+    events=JSON.parse(JSON.stringify(events));
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
-        calendar = new FullCalendar.Calendar(calendarEl, {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -55,7 +51,6 @@
             weekNumberCalculation: 'ISO',
             showNonCurrentDates: false,// will disable the non current month days
             dayMaxEvents: true, // allow "more" link when too many events
-            // hiddenDays: [ 1, 3, 5 ] ,
             views: {            
                 timeGridDay: { buttonText: 'Day' },
                 timeGridWeek: { buttonText: 'week' },
@@ -66,39 +61,34 @@
                 listYear: { buttonText: 'List Year' },
             },
             displayEventTime: false, 
-            eventClick: function(arg) {    
-                var template = '<tr><th class="o-box-name">Event Title</td><td>'+arg.event.title+'</td>';
-                template += '<tr><th class="o-box-name">Event Start Date</td><td>'+arg.event.start+'</td>';
-                template += '<tr><th class="o-box-name">Event End Date</td><td>'+arg.event.end+'</td>';
-                template += '<tr><th class="o-box-name">Event Status</td><td>'+arg.event.extendedProps.status+'</td>';
+            eventClick: async function(arg) {
+                let event_id=arg.event.extendedProps.event_id;
+                // console.log(event_id);
+                await fetch_event(event_id);                
             },
             loading: function(bool) {
                 // document.getElementById('loading').style.display = bool ? 'block' : 'none';
             },
             select: function(arg) {
-                
+
             },
-            
-            events: []
+            events: events
 
         });
 
         calendar.render();
-    });
-
+    });   
     function submit_form(){
        var data=$('#leave_frm').serialize();
        $.ajax({
-            url:"{{route('save_event')}}",
+            url:"{{route('admin_save_event_info')}}",
             method:"POST", 
             data:data+'&_token={{ csrf_token() }}',
             success:function(response) {
                 if(response.success){
-                    $("#liveToast").removeClass('hide').addClass('show');
-                    $('#leave_frm')[0].reset();
+                    // $("#liveToast").removeClass('hide').addClass('show');
                     $("#leave_popup").modal('hide').data( 'bs.modal', null );
-                    new Noty({ type: 'success', layout: 'topRight', text: 'Record has been updated successfully',timeout:3000 }).show();
-                    calendar.addEvent({title: $("#event_title").val(), start: $("#from_date").val(), end: $("#to_date").val(),  allDay: true });
+                    new Noty({ type: 'success', layout: 'topRight', text: 'Record has been updated successfully',timeout:3000 }).show(); 
                 }else{
                     new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
                 }
@@ -107,21 +97,61 @@
                 new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
             }
         });
-    }   
-
-    $(document).ready(function(){
+    }
+    function fetch_event(event_id){
+        $.ajax({
+            url:"{{route('fetch_home_event')}}",
+            method:"POST", 
+            data:{event_id:event_id,'_token':'{{ csrf_token() }}'},
+            success:function(response) {
+                if(response.success){                    
+                    $('#processed_event').html(response.html);  
+                    $("#leave_popup").modal('show');                 
+                }else{
+                    alert('unable to fetch the event.');
+                }
+            },
+            error:function(){
+                alert('Error: unable to fetch the event.');
+            }
+        });
+    }
+    function exclude_dated_form(){
+       var data=$('#restricted_dated_frm').serialize();
+       $.ajax({
+            url:"{{route('admin_restricted_dated_info')}}",
+            method:"POST", 
+            data:data+'&_token={{ csrf_token() }}',
+            success:function(response) {
+                if(response.success){;
+                    $('#restricted_dated').val("");
+                    new Noty({ type: 'success', layout: 'topRight', text: 'Record has been created successfully',timeout:3000 }).show(); 
+                }else{
+                    new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Please check you input data',timeout:3000 }).show();
+                }
+            },
+            error:function(){
+                new Noty({ type: 'error', layout: 'topRight', text: 'Your Request is not sent. Error occuring on processing request',timeout:3000 }).show(); 
+            }
+        });
+    }
+    $(document).ready(function(){        
         $("#leave_frm").validate({
             submitHandler: function (form) {
                 submit_form();
                 return false;
             }
-        });        
-        $('body').tooltip({  selector: '.createdDiv'});
-        $('#from_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
-        $('#to_date').datetimepicker({format: 'YYYY-MM-DD hh:mm'});
+        }); 
+        $("#restricted_dated_frm").validate({
+            submitHandler: function (form) {
+                exclude_dated_form();
+                return false;
+            }
+        });
+        $('#restricted_dated').multiDatesPicker({dateFormat: "yy-mm-dd"}); 
     });
     </script>
-    <style>
+     <style>
         .fc .fc-button-group > .fc-button {
             position: relative;
             flex: 1 1 auto;
@@ -133,56 +163,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div id="liveToast" class="toast align-items-center text-white bg-success border-0 hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex">
-                            <div class="toast-body">
-                                Your request has been sent.
-                            </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                    </div>
+                <div class="modal-body">                                   
                 <form name="leave_frm" id="leave_frm">
-                    <div class="mb-3">
-                        <label for="event_title" class="col-form-label">Title</label>                
-                        <input type="text" name="event_title" class="form-control required" id="event_title" value="">
+                    <div id="processed_event">
+
                     </div>
-                    <div class="mb-3 row">
-                        <label for="from_date" class="col-sm-2 col-form-label">From</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="from_date" class="form-control required" id="from_date" value="" >
-                        </div>                
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="to_date" class="col-sm-2 col-form-label">To</label>
-                        <div class="col-sm-10" id="datetimepicker2">
-                            <input type="text" name="to_date" class="form-control required" id="to_date" value="" >
-                        </div>                
-                    </div>
-                    <div class="mb-3">
-                        <?php 
-                            $leave_type=["1"=>"Sick Leave","2"=>"Work Leave","3"=>"Maternal Leave","4"=>"Marriage Leave","5"=>"Anniversary Leave"];
-                        ?>
-                        <label for="leave_type" class="col-form-label">Selection Type</label>                
-                        <select name="leave_type" class="form-control required">
-                            <option value="">Please select atleast one value</option>
-                            <?php if(!empty($leave_type)){
-                                foreach ($leave_type as $key => $value) {?>
-                                <option value="{{$key}}">{{$value}}</option>             
-                            <?php  } }?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="to_date" class="col-sm-2 col-form-label">Description</label>                
-                        <textarea name="description" class="form-control required" id="description"></textarea>
-                    </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" >Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+                    
+                </div>
                 </form>
             </div>
         </div>

@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CalendarController;
+use App\Models\LeaveEvent;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +21,34 @@ use App\Http\Controllers\CalendarController;
 
 Route::get('/', function () {
     // echo "Hello world";
-    return view('welcome');
+    $levents=LeaveEvent::join('users', 'tbl_leave_events.user_id', '=', 'users.id')->select('tbl_leave_events.*','users.assigned_color') ->get()->toArray();
+    $final_array=[];
+    if(!empty($levents)){
+        foreach ($levents as $key => $value) {
+            $data=[
+                "title"     => (!empty($value['event_title']))?$value['event_title']:"",
+                "start"     => (!empty($value['start_date']))?date('Y-m-d H:i:s',strtotime($value['start_date'])):"",
+                "end"       => (!empty($value['end_date']))?date('Y-m-d H:i:s',strtotime($value['end_date'])):"",
+                "color"     => (!empty($value['assigned_color']))?$value['assigned_color']:"#0d6efd",
+                "status"    =>  (!empty($value['status']))?'Approved':"Pending",
+                "event_id"    =>  (!empty($value['id']))?$value['id']:"0",
+            ];
+            $final_array[]=$data;
+        }
+    }
+    return view('welcome',['levents'=>json_encode($final_array)]);
 });
+Route::post('/fetch/home/event', function (Request $request) {
+    if(!empty($request->event_id)){
+        $single_events=LeaveEvent::where(['id'=>$request->event_id])->first()->toArray();
+        $evnt_dta= view('admin.calendar.fetch_event_info',['single_events'=>$single_events])->render();
+        $m_final_data=['success'=>true,"html"=>$evnt_dta];
+        return response()->json($m_final_data);
+    }else{
+        $m_final_data=['success'=>false,"html"=>""];
+        return response()->json($m_final_data);
+    }
+})->name('fetch_home_event');;
 
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
