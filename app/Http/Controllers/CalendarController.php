@@ -55,6 +55,12 @@ class CalendarController extends Controller
             $event=LeaveEvent::where(['id'=>$input['event_id']])->update($event);
             $event_flag=true;
             if($event_flag){
+                if($input['status']==1){
+                    $details=LeaveEvent::join('users', 'tbl_leave_events.user_id', '=', 'users.id')->select('users.*')->where(["tbl_leave_events.id"=>$input['event_id']])->first()->toArray();
+                    if(!empty($details)){
+                        \Mail::to($details['email'])->send(new \App\Mail\ApprovalEmail($details));
+                    }
+                }
                 $m_final_data=['success'=>true];
             }else{
                 $m_final_data=['success'=>false];
