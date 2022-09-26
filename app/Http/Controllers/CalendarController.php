@@ -105,4 +105,49 @@ class CalendarController extends Controller
     
         return $dates;
     }
+    public function leaves(Request $request){
+        $result=RestrictedDates::orderBy('id', 'desc')->paginate(10);
+        $heading="Restricted Leaves";
+        return view('admin.leaves.list',['result'=>$result,'heading'=>$heading]);
+    }
+    public function leaves_edit(Request $request,$id=null){        
+        if ($request->isMethod('post')) {
+            $lastInsertedId="";
+            $msg="";
+            $input=$request->all();
+            // dd($input);
+            $restricted_dated=(!empty($input['restricted_dated']))?explode('~',$input['restricted_dated']):"";
+            if(!empty($restricted_dated) && is_array($restricted_dated)){
+                $restricted_dated=$this->dateRange($restricted_dated[0],$restricted_dated[1]);
+                // dd($restricted_dated);
+                $restricted_dated=array_map('trim', $restricted_dated);
+                $restricted_dated=json_encode($restricted_dated);
+                // dd($restricted_dated);
+                $restricted_info=[                
+                    'restricted_dated'=>$restricted_dated,
+                    'year'       =>date('Y'),
+                ];                
+                if(!empty($request->id)){                
+                    RestrictedDates::where('id', $request->id)->update($restricted_info);
+                    $lastInsertedId=true;
+                    $msg="updated";
+                }
+            }
+            if (!empty($lastInsertedId)) {
+                return redirect()->route('admin_leaves')->with('success','Record has been '.$msg.' successfully.');
+            }else{
+                return back()->with('error','Not an Authorize user.');
+            }
+        }
+        $result="";
+        $heading="Restricted Leaves";
+        if(!empty($id)){
+            $result = RestrictedDates::find($id);
+        }
+        return view('admin.leaves.edit',['result'=>$result,'heading'=>$heading]);
+    }
+    public function leaves_delete(Request $request,$id=null){ 
+        RestrictedDates::where('id', $id)->delete();
+        return redirect()->route('admin_leaves')->with('success','Record has been deleted successfully.');
+    }
 }

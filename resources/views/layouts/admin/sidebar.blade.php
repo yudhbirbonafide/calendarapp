@@ -30,6 +30,7 @@
                     <li data-username="form elements advance componant validation masking wizard picker select" class="nav-item">
                         <a href="{{route('admin_calender_setup')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext">Leave Calender</span></a>
                     </li>                   -->
+                    <li data-username="Disabled Menu" class="nav-item "><a href="{{route('admin_leaves')}}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Restricted Leaves</span></a></li>
                     <li data-username="Disabled Menu" class="nav-item "><a href="{{route('admin_logout')}}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Logout</span></a></li>
                 </ul>
             </div>

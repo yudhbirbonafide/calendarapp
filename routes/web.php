@@ -74,6 +74,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/calender/event/fetch', [CalendarController::class, 'fetch_event_info'])->name('admin_calender_fetch_event_info');
         Route::post('/calender/event/save', [CalendarController::class, 'save_event_info'])->name('admin_save_event_info');
         Route::post('/calender/event/restricted', [CalendarController::class, 'save_restricted_dated_info'])->name('admin_restricted_dated_info');
+
+        Route::get('/calender/restricted/leaves', [CalendarController::class, 'leaves'])->name('admin_leaves');
+        Route::match(['get', 'post'],'/calender/restricted/leaves/edit/{id?}', [CalendarController::class, 'leaves_edit'])->name('admin_leaves_edit');
+        Route::get('calender/restricted/leaves/delete/{id}', [CalendarController::class, 'leaves_delete'])->name('admin_leaves_delete');
         
     });
 });
